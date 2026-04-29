@@ -1,0 +1,105 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BASE */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #e3f2fd, #f5f9ff);
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(90deg, #0d47a1, #1565c0);
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.logo {
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+/* CONTAINER */
+.container {
+  padding: 30px;
+}
+
+/* TITULOS */
+h2 {
+  color: #0d47a1;
+  margin-bottom: 20px;
+}
+
+/* GRID */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* CARD */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  width: 220px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* IMAGEM */
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* CONTROLES */
+.controls {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.controls span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0d47a1;
+}
+
+/* BOTÕES */
+button {
+  background-color: #0d47a1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: #1565c0;
+}
+
+/* RESUMO */
+.resumo {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
