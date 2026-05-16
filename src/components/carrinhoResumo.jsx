@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 function CarrinhoResumo({
-  total = 0,
-  carrinho = {},
+  total,
+  carrinho,
   limparCarrinho,
-  totalCompra = 0,
+  totalCompra,
   finalizarCompra,
 }) {
   const carrinhoVazio = total === 0;
@@ -12,19 +12,14 @@ function CarrinhoResumo({
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [endereco, setEndereco] = useState("");
-
   const [mensagem, setMensagem] = useState("");
   const [tipoMensagem, setTipoMensagem] = useState("");
 
   function enviarCheckout(evento) {
     evento.preventDefault();
 
-    if (
-      nome.trim() === "" ||
-      email.trim() === "" ||
-      endereco.trim() === ""
-    ) {
-      setMensagem("Preencha todos os campos.");
+    if (nome.trim() === "" || email.trim() === "" || endereco.trim() === "") {
+      setMensagem("Preencha todos os campos antes de finalizar a compra.");
       setTipoMensagem("erro");
       return;
     }
@@ -32,9 +27,7 @@ function CarrinhoResumo({
     setMensagem("Compra finalizada com sucesso!");
     setTipoMensagem("sucesso");
 
-    if (finalizarCompra) {
-      finalizarCompra();
-    }
+    finalizarCompra();
 
     setNome("");
     setEmail("");
@@ -52,7 +45,7 @@ function CarrinhoResumo({
       ) : (
         <>
           <div className="lista-carrinho">
-            {Object.entries(carrinho || {}).map(([nomeProduto, quantidade]) => {
+            {Object.entries(carrinho).map(([nomeProduto, quantidade]) => {
               if (quantidade <= 0) return null;
 
               let preco = 0;
@@ -98,26 +91,12 @@ function CarrinhoResumo({
 
             <div className="dados-checkout">
               <h3>Dados do cliente</h3>
-
-              <p>
-                <strong>Nome:</strong>{" "}
-                {nome || "Não informado"}
-              </p>
-
-              <p>
-                <strong>Email:</strong>{" "}
-                {email || "Não informado"}
-              </p>
-
-              <p>
-                <strong>Endereço:</strong>{" "}
-                {endereco || "Não informado"}
-              </p>
+              <p>Nome: {nome || "Não informado"}</p>
+              <p>Email: {email || "Não informado"}</p>
+              <p>Endereço: {endereco || "Não informado"}</p>
             </div>
 
-            <button type="submit">
-              Finalizar compra
-            </button>
+            <button type="submit">Finalizar compra</button>
 
             {mensagem && (
               <p className={`mensagem-checkout ${tipoMensagem}`}>
@@ -126,9 +105,7 @@ function CarrinhoResumo({
             )}
           </form>
 
-          <button onClick={limparCarrinho}>
-            Limpar carrinho
-          </button>
+          <button onClick={limparCarrinho}>Limpar carrinho</button>
         </>
       )}
     </div>
