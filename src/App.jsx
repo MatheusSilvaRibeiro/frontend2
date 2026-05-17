@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
-import Header from "./components/header";
-import ProdutoCard from "./components/produtoCard";
-import CarrinhoResumo from "./components/carrinhoResumo";
-import { produtos } from "./data/produtos";
+import Header from "./components/Header";
 import "./styles/global.css";
+import { Routes, Route } from "react-router-dom";
+import Produtos from "./pages/Produtos";
+import Home from "./pages/Home";
+import Checkout from "./pages/Checkout";
+import buscarProdutos from "./services/produtoService";
 
 function App() {
   const [carrinho, setCarrinho] = useState({});
+  const [produtos, setProdutos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [mensagemProdutos, setMensagemProdutos] = useState("");
 
   useEffect(() => {
     const carrinhoSalvo = localStorage.getItem("carrinho");
@@ -14,6 +19,25 @@ function App() {
     if (carrinhoSalvo) {
       setCarrinho(JSON.parse(carrinhoSalvo));
     }
+  }, []);
+
+  useEffect(() => {
+    async function carregarProdutos() {
+      try {
+        setCarregando(true);
+
+        const dados = await buscarProdutos();
+        setProdutos(dados);
+
+        setMensagemProdutos("Produtos carregados com sucesso.");
+      } catch (error) {
+        setMensagemProdutos("Não foi possível carregar os produtos.");
+      } finally {
+        setCarregando(false);
+      }
+    }
+
+    carregarProdutos();
   }, []);
 
   useEffect(() => {
@@ -28,10 +52,20 @@ function App() {
   };
 
   const remover = (nome) => {
-    setCarrinho((prev) => ({
-      ...prev,
-      [nome]: Math.max((prev[nome] || 0) - 1, 0),
-    }));
+    setCarrinho((prev) => {
+      const quantidadeAtual = prev[nome] || 0;
+
+      if (quantidadeAtual <= 1) {
+        const novoCarrinho = { ...prev };
+        delete novoCarrinho[nome];
+        return novoCarrinho;
+      }
+
+      return {
+        ...prev,
+        [nome]: quantidadeAtual - 1,
+      };
+    });
   };
 
   const limparCarrinho = () => {
@@ -40,8 +74,6 @@ function App() {
   };
 
   const finalizarCompra = () => {
-    alert("Compra finalizada com sucesso!");
-
     setCarrinho({});
     localStorage.removeItem("carrinho");
   };
@@ -53,7 +85,6 @@ function App() {
 
   const totalCompra = produtos.reduce((acc, produto) => {
     const quantidade = carrinho[produto.nome] || 0;
-
     return acc + quantidade * produto.preco;
   }, 0);
 
@@ -61,27 +92,37 @@ function App() {
     <div>
       <Header />
 
-      <div className="container">
-        <CarrinhoResumo
-           total={totalItens}
-           carrinho={carrinho}
-           limparCarrinho={limparCarrinho}
-           totalCompra={totalCompra}
-           finalizarCompra={finalizarCompra}
-            />
+      <Routes>
+        <Route path="/" element={<Home />} />
 
-        <div className="grid">
-          {produtos.map((produto) => (
-            <ProdutoCard
-              key={produto.id}
-              produto={produto}
-              quantidade={carrinho[produto.nome] || 0}
+        <Route
+          path="/produtos"
+          element={
+            <Produtos
+              produtos={produtos}
+              carrinho={carrinho}
               adicionar={adicionar}
               remover={remover}
+              carregando={carregando}
+              mensagemProdutos={mensagemProdutos}
             />
-          ))}
-        </div>
-      </div>
+          }
+        />
+
+        <Route
+          path="/checkout"
+          element={
+            <Checkout
+              carrinho={carrinho}
+              produtos={produtos}
+              limparCarrinho={limparCarrinho}
+              totalItens={totalItens}
+              totalCompra={totalCompra}
+              finalizarCompra={finalizarCompra}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }

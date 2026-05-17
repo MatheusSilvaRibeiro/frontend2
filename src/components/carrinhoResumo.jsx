@@ -3,6 +3,7 @@ import { useState } from "react";
 function CarrinhoResumo({
   total,
   carrinho,
+  produtos,
   limparCarrinho,
   totalCompra,
   finalizarCompra,
@@ -48,11 +49,11 @@ function CarrinhoResumo({
             {Object.entries(carrinho).map(([nomeProduto, quantidade]) => {
               if (quantidade <= 0) return null;
 
-              let preco = 0;
+              const produtoEncontrado = produtos.find(
+                (produto) => produto.nome === nomeProduto
+              );
 
-              if (nomeProduto === "Camiseta") preco = 79.9;
-              if (nomeProduto === "Boné") preco = 59.9;
-              if (nomeProduto === "Moletom") preco = 149.9;
+              const preco = produtoEncontrado ? produtoEncontrado.preco : 0;
 
               return (
                 <p key={nomeProduto}>
@@ -66,37 +67,30 @@ function CarrinhoResumo({
           <h3>Total da compra: R$ {totalCompra.toFixed(2)}</h3>
 
           <form className="checkout" onSubmit={enviarCheckout}>
-            <h2>Checkout</h2>
+            <h2>Informações de entrega</h2>
 
             <input
               type="text"
-              placeholder="Digite seu nome"
+              placeholder="Nome completo"
               value={nome}
               onChange={(evento) => setNome(evento.target.value)}
             />
 
             <input
               type="email"
-              placeholder="Digite seu email"
+              placeholder="E-mail"
               value={email}
               onChange={(evento) => setEmail(evento.target.value)}
             />
 
             <input
               type="text"
-              placeholder="Digite seu endereço"
+              placeholder="Endereço de entrega"
               value={endereco}
               onChange={(evento) => setEndereco(evento.target.value)}
             />
 
-            <div className="dados-checkout">
-              <h3>Dados do cliente</h3>
-              <p>Nome: {nome || "Não informado"}</p>
-              <p>Email: {email || "Não informado"}</p>
-              <p>Endereço: {endereco || "Não informado"}</p>
-            </div>
-
-            <button type="submit">Finalizar compra</button>
+            <button type="submit">Finalizar pedido</button>
 
             {mensagem && (
               <p className={`mensagem-checkout ${tipoMensagem}`}>
