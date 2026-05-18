@@ -90,7 +90,9 @@ function CarrinhoResumo({
               onChange={(evento) => setEndereco(evento.target.value)}
             />
 
-            <button type="submit">Finalizar pedido</button>
+            <button className="finalizar-btn" type="submit">
+  Finalizar pedido
+</button>
 
             {mensagem && (
               <p className={`mensagem-checkout ${tipoMensagem}`}>
@@ -99,7 +101,9 @@ function CarrinhoResumo({
             )}
           </form>
 
-          <button onClick={limparCarrinho}>Limpar carrinho</button>
+          <button className="limpar-btn" onClick={limparCarrinho}>
+  Limpar carrinho
+</button>
         </>
       )}
     </div>
