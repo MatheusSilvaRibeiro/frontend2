@@ -113,7 +113,7 @@ npm run dev
 - Matheus Silva Ribeiro
 - Tauane Carolina
 - Igor Mafalda
-- Luan
+- Luan Martins
 
 ---
 
