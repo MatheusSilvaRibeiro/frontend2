@@ -39,16 +39,17 @@ function CarrinhoResumo({
       };
     });
 
-    const pedido = {
-      cliente: {
-        nome,
-        email,
-        endereco,
-      },
-      itens,
-      total: totalCompra,
-    };
+            const pedido = {
+          cliente: {
+            nome,
+            email,
+            endereco,
+          },
+          itens,
+          total: totalCompra,
+        };
 
+console.log("Pedido enviado:", pedido);
     try {
       await criarPedido(pedido);
 
