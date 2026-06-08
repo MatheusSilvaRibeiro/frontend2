@@ -7,18 +7,19 @@ import Checkout from "./pages/Checkout";
 import buscarProdutos from "./services/produtoService";
 
 function App() {
-  const [carrinho, setCarrinho] = useState({});
-  const [produtos, setProdutos] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [mensagemProdutos, setMensagemProdutos] = useState("");
-
-  useEffect(() => {
+  const [carrinho, setCarrinho] = useState(() => {
     const carrinhoSalvo = localStorage.getItem("carrinho");
 
     if (carrinhoSalvo) {
-      setCarrinho(JSON.parse(carrinhoSalvo));
+      return JSON.parse(carrinhoSalvo);
     }
-  }, []);
+
+    return {};
+  });
+
+  const [produtos, setProdutos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [mensagemProdutos, setMensagemProdutos] = useState("");
 
   useEffect(() => {
     async function carregarProdutos() {
@@ -43,26 +44,39 @@ function App() {
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
   }, [carrinho]);
 
-  const adicionar = (nome) => {
-    setCarrinho((prev) => ({
-      ...prev,
-      [nome]: (prev[nome] || 0) + 1,
-    }));
+  const adicionar = (id) => {
+    const produto = produtos.find((item) => item.id === id);
+
+    if (!produto) return;
+
+    setCarrinho((prev) => {
+      const quantidadeAtual = prev[id] || 0;
+
+      if (quantidadeAtual >= produto.estoque) {
+        alert("Estoque máximo atingido para este produto.");
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [id]: quantidadeAtual + 1,
+      };
+    });
   };
 
-  const remover = (nome) => {
+  const remover = (id) => {
     setCarrinho((prev) => {
-      const quantidadeAtual = prev[nome] || 0;
+      const quantidadeAtual = prev[id] || 0;
 
       if (quantidadeAtual <= 1) {
         const novoCarrinho = { ...prev };
-        delete novoCarrinho[nome];
+        delete novoCarrinho[id];
         return novoCarrinho;
       }
 
       return {
         ...prev,
-        [nome]: quantidadeAtual - 1,
+        [id]: quantidadeAtual - 1,
       };
     });
   };
@@ -83,7 +97,7 @@ function App() {
   );
 
   const totalCompra = produtos.reduce((acc, produto) => {
-    const quantidade = carrinho[produto.nome] || 0;
+    const quantidade = carrinho[produto.id] || 0;
     return acc + quantidade * produto.preco;
   }, 0);
 

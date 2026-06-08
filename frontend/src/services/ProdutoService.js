@@ -28,8 +28,10 @@ async function buscarProdutos() {
       imagem: produto.thumbnail,
       descricao: produto.description,
       categoria: produto.category,
+      estoque: produto.stock,
     }));
 
+      console.log("Produtos formatados:", produtosFormatados);
     return produtosFormatados;
   } catch (error) {
     console.error("Erro na API. Usando produtos locais:", error);
