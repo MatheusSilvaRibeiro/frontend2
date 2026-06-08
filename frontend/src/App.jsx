@@ -7,18 +7,19 @@ import Checkout from "./pages/Checkout";
 import buscarProdutos from "./services/produtoService";
 
 function App() {
-  const [carrinho, setCarrinho] = useState({});
-  const [produtos, setProdutos] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [mensagemProdutos, setMensagemProdutos] = useState("");
-
-  useEffect(() => {
+  const [carrinho, setCarrinho] = useState(() => {
     const carrinhoSalvo = localStorage.getItem("carrinho");
 
     if (carrinhoSalvo) {
-      setCarrinho(JSON.parse(carrinhoSalvo));
+      return JSON.parse(carrinhoSalvo);
     }
-  }, []);
+
+    return {};
+  });
+
+  const [produtos, setProdutos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [mensagemProdutos, setMensagemProdutos] = useState("");
 
   useEffect(() => {
     async function carregarProdutos() {
