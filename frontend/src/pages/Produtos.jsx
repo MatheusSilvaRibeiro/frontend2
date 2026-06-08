@@ -8,7 +8,7 @@ function Produtos({ produtos, carrinho, adicionar, remover }) {
           <ProdutoCard
             key={produto.id}
             produto={produto}
-            quantidade={carrinho[produto.nome] || 0}
+            quantidade={carrinho[produto.id] || 0}
             adicionar={adicionar}
             remover={remover}
           />

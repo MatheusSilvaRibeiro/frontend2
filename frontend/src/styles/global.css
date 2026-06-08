@@ -486,3 +486,8 @@ button.limpar-btn{
   bottom: -100px;
   right: -100px;
 }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

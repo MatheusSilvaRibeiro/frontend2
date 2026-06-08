@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { criarPedido } from "../services/PedidoService";
 
 function CarrinhoResumo({
   total,
@@ -16,7 +17,7 @@ function CarrinhoResumo({
   const [mensagem, setMensagem] = useState("");
   const [tipoMensagem, setTipoMensagem] = useState("");
 
-  function enviarCheckout(evento) {
+  async function enviarCheckout(evento) {
     evento.preventDefault();
 
     if (nome.trim() === "" || email.trim() === "" || endereco.trim() === "") {
@@ -25,14 +26,44 @@ function CarrinhoResumo({
       return;
     }
 
-    setMensagem("Compra finalizada com sucesso!");
-    setTipoMensagem("sucesso");
+    const itens = Object.entries(carrinho).map(([produtoId, quantidade]) => {
+      const produto = produtos.find(
+        (item) => String(item.id) === String(produtoId)
+      );
 
-    finalizarCompra();
+      return {
+        produtoId,
+        nome: produto?.nome || "Produto não encontrado",
+        quantidade,
+        preco: produto?.preco || 0,
+      };
+    });
 
-    setNome("");
-    setEmail("");
-    setEndereco("");
+    const pedido = {
+      cliente: {
+        nome,
+        email,
+        endereco,
+      },
+      itens,
+      total: totalCompra,
+    };
+
+    try {
+      await criarPedido(pedido);
+
+      setMensagem("Pedido finalizado com sucesso!");
+      setTipoMensagem("sucesso");
+
+      finalizarCompra();
+
+      setNome("");
+      setEmail("");
+      setEndereco("");
+    } catch (error) {
+      setMensagem("Não foi possível finalizar o pedido. Tente novamente.");
+      setTipoMensagem("erro");
+    }
   }
 
   return (
@@ -45,24 +76,27 @@ function CarrinhoResumo({
         <p>Seu carrinho está vazio.</p>
       ) : (
         <>
-          <div className="lista-carrinho">
-            {Object.entries(carrinho).map(([nomeProduto, quantidade]) => {
-              if (quantidade <= 0) return null;
+                <div className="lista-carrinho">
+        {Object.entries(carrinho).map(([produtoId, quantidade]) => {
+          if (quantidade <= 0) return null;
 
-              const produtoEncontrado = produtos.find(
-                (produto) => produto.nome === nomeProduto
-              );
+          const produtoEncontrado = produtos.find(
+            (produto) => String(produto.id) === String(produtoId)
+          );
 
-              const preco = produtoEncontrado ? produtoEncontrado.preco : 0;
+          const nomeProduto = produtoEncontrado
+            ? produtoEncontrado.nome
+            : "Produto não encontrado";
 
-              return (
-                <p key={nomeProduto}>
-                  {nomeProduto}: {quantidade} — R${" "}
-                  {(preco * quantidade).toFixed(2)}
-                </p>
-              );
-            })}
-          </div>
+          const preco = produtoEncontrado ? produtoEncontrado.preco : 0;
+
+          return (
+            <p key={produtoId}>
+              {nomeProduto}: {quantidade} — R$ {(preco * quantidade).toFixed(2)}
+            </p>
+          );
+        })}
+      </div>
 
           <h3>Total da compra: R$ {totalCompra.toFixed(2)}</h3>
 
@@ -91,8 +125,8 @@ function CarrinhoResumo({
             />
 
             <button className="finalizar-btn" type="submit">
-  Finalizar pedido
-</button>
+              Finalizar pedido
+            </button>
 
             {mensagem && (
               <p className={`mensagem-checkout ${tipoMensagem}`}>
@@ -102,8 +136,8 @@ function CarrinhoResumo({
           </form>
 
           <button className="limpar-btn" onClick={limparCarrinho}>
-  Limpar carrinho
-</button>
+            Limpar carrinho
+          </button>
         </>
       )}
     </div>
