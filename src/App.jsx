@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Produtos from "./pages/Produtos";
 import Home from "./pages/Home";
 import Checkout from "./pages/Checkout";
+import AdminProdutos from "./pages/AdminProdutos";
 import buscarProdutos from "./services/produtoService";
 
 function App() {
@@ -120,6 +121,10 @@ function App() {
               finalizarCompra={finalizarCompra}
             />
           }
+        />
+        <Route
+          path="/admin"
+          element={<AdminProdutos />}
         />
       </Routes>
     </div>
