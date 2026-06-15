@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import Header from "./components/header";
 import { Routes, Route } from "react-router-dom";
 import Produtos from "./pages/Produtos";
-import Home from "./pages/Home";
-import Checkout from "./pages/Checkout";
-import AdminProdutos from "./pages/AdminProdutos";
-import buscarProdutos from "./services/produtoService";
+import buscarProdutos from "./services/ProdutoService";
+import Admin from "./pages/Admin";
+
 
 function App() {
   const [carrinho, setCarrinho] = useState({});
@@ -121,11 +120,7 @@ function App() {
               finalizarCompra={finalizarCompra}
             />
           }
-        />
-        <Route
-          path="/admin"
-          element={<AdminProdutos />}
-        />
+        /><Route path="/admin" element={<Admin />} />
       </Routes>
     </div>
   );
