@@ -537,3 +537,17 @@ button.limpar-btn{
   border-radius: 24px;
   padding: 30px;
 }
+/* BOTÕES DA TABELA (ADMIN - EXCLUIR / EDITAR) */
+.admin-lista button {
+  width: auto;
+  height: auto;
+  min-width: 90px;
+
+  padding: 10px 16px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+}

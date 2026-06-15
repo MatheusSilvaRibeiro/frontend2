@@ -9,8 +9,10 @@ function Admin() {
   const [nome, setNome] = useState("");
   const [preco, setPreco] = useState("");
   const [imagem, setImagem] = useState(null);
+  const [produtos, setProdutos] = useState([]);
 
   function fazerLogin(e) {
+    
     e.preventDefault();
 
     if (usuario === "admin" && senha === "1234") {
@@ -20,7 +22,34 @@ function Admin() {
       setErro("Usuário ou senha inválidos.");
     }
   }
+function fazerLogin(e) {
+  e.preventDefault();
 
+  if (usuario === "admin" && senha === "1234") {
+    setLogado(true);
+    setErro("");
+  } else {
+    setErro("Usuário ou senha inválidos.");
+  }
+}
+
+// ADICIONE AQUI 👇
+function cadastrarProduto(e) {
+  e.preventDefault();
+
+  const novoProduto = {
+    id: Date.now(),
+    nome,
+    preco,
+    imagem: imagem ? imagem.name : "Sem imagem",
+  };
+
+  setProdutos([...produtos, novoProduto]);
+
+  setNome("");
+  setPreco("");
+  setImagem(null);
+}
   if (!logado) {
     return (
       <div className="admin-container">
@@ -53,7 +82,7 @@ function Admin() {
     <div className="admin-container">
       <h1>Painel Administrativo</h1>
 
-      <form className="admin-form">
+      <form className="admin-form" onSubmit={cadastrarProduto}>
         <input
           type="text"
           placeholder="Nome do produto"
@@ -80,10 +109,33 @@ function Admin() {
       </form>
 
       <div className="admin-lista">
-        <h2>Produtos cadastrados</h2>
+  <h2>Produtos cadastrados</h2>
 
-        <p>Nenhum produto cadastrado.</p>
-      </div>
+  {produtos.length === 0 ? (
+    <p>Nenhum produto cadastrado.</p>
+  ) : (
+    <ul>
+      {produtos.map((produto) => (
+        <li key={produto.id}>
+          {produto.nome} - R$ {produto.preco}
+
+          <button
+            type="button"
+            onClick={() =>
+              setProdutos(
+                produtos.filter(
+                  (p) => p.id !== produto.id
+                )
+              )
+            }
+          >
+            Excluir
+          </button>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
     </div>
   );
 }
