@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Produtos from "./pages/Produtos";
 import Home from "./pages/Home";
 import Checkout from "./pages/Checkout";
-import buscarProdutos from "./services/produtoService";
+import buscarProdutos from "./services/ProdutoService";
 
 function App() {
   const [carrinho, setCarrinho] = useState(() => {

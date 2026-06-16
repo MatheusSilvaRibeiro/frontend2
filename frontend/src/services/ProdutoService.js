@@ -1,42 +1,44 @@
 import { produtos } from "../data/produtos";
 
-async function buscarProdutos() {
-  try {
-    const categorias = [
-      "smartphones",
-      "laptops",
-      "tablets",
-      "mobile-accessories",
-    ];
+const PRODUTOS_KEY = "bluewave_produtos";
 
-    const requisicoes = categorias.map((categoria) =>
-      fetch(`https://dummyjson.com/products/category/${categoria}`)
-    );
+function salvarProdutos(listaProdutos) {
+  localStorage.setItem(PRODUTOS_KEY, JSON.stringify(listaProdutos));
+}
 
-    const respostas = await Promise.all(requisicoes);
+function carregarProdutosLocais() {
+  const produtosSalvos = JSON.parse(localStorage.getItem(PRODUTOS_KEY));
 
-    const dados = await Promise.all(
-      respostas.map((resposta) => resposta.json())
-    );
-
-    const produtosApi = dados.flatMap((item) => item.products);
-
-    const produtosFormatados = produtosApi.slice(0, 16).map((produto) => ({
-      id: produto.id,
-      nome: produto.title,
-      preco: produto.price,
-      imagem: produto.thumbnail,
-      descricao: produto.description,
-      categoria: produto.category,
-      estoque: produto.stock,
-    }));
-
-      console.log("Produtos formatados:", produtosFormatados);
-    return produtosFormatados;
-  } catch (error) {
-    console.error("Erro na API. Usando produtos locais:", error);
-    return produtos;
+  if (produtosSalvos && produtosSalvos.length > 0) {
+    return produtosSalvos;
   }
+
+  salvarProdutos(produtos);
+  return produtos;
+}
+
+export async function buscarProdutos() {
+  return carregarProdutosLocais();
+}
+
+export function atualizarEstoqueAposPedido(itensPedido) {
+  const produtosAtuais = carregarProdutosLocais();
+
+  const produtosAtualizados = produtosAtuais.map((produto) => {
+    const itemPedido = itensPedido.find(
+      (item) => String(item.produtoId) === String(produto.id)
+    );
+
+    if (!itemPedido) return produto;
+
+    return {
+      ...produto,
+      estoque: Math.max((produto.estoque || 0) - itemPedido.quantidade, 0),
+    };
+  });
+
+  salvarProdutos(produtosAtualizados);
+  return produtosAtualizados;
 }
 
 export default buscarProdutos;
