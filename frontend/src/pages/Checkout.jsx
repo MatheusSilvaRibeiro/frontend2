@@ -1,4 +1,4 @@
-import CarrinhoResumo from "../components/CarrinhoResumo";
+import CarrinhoResumo from "../components/carrinhoResumo";
 
 function Checkout({
   carrinho,

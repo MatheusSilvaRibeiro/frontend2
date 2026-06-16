@@ -1,4 +1,4 @@
-import ProdutoCard from "../components/ProdutoCard";
+import ProdutoCard from "../components/produtoCard";
 
 function Produtos({ produtos, carrinho, adicionar, remover }) {
   return (
