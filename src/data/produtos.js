@@ -6,22 +6,21 @@ export const produtos = [
   {
     id: 1,
     nome: "Camiseta",
-    preco: 79.9,
+    preco: 79.90,
     imagem: camiseta,
-    estoque: 10,
   },
+
   {
     id: 2,
     nome: "Boné",
-    preco: 59.9,
+    preco: 59.90,
     imagem: bone,
-    estoque: 10,
   },
+
   {
     id: 3,
     nome: "Moletom",
-    preco: 149.9,
+    preco: 149.90,
     imagem: moletom,
-    estoque: 10,
   },
 ];
