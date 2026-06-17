@@ -7,17 +7,24 @@ function Checkout({
   totalItens,
   totalCompra,
   finalizarCompra,
+  pedidoFinalizado,
 }) {
   return (
     <div className="container">
-      <CarrinhoResumo
-        total={totalItens}
-        carrinho={carrinho}
-        produtos={produtos}
-        limparCarrinho={limparCarrinho}
-        totalCompra={totalCompra}
-        finalizarCompra={finalizarCompra}
-      />
+      {pedidoFinalizado ? (
+        <div className="resumo">
+          <h2>Pedido realizado com sucesso!</h2>
+        </div>
+      ) : (
+        <CarrinhoResumo
+          total={totalItens}
+          carrinho={carrinho}
+          produtos={produtos}
+          limparCarrinho={limparCarrinho}
+          totalCompra={totalCompra}
+          finalizarCompra={finalizarCompra}
+        />
+      )}
     </div>
   );
 }

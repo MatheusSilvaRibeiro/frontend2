@@ -30,6 +30,7 @@ async function buscarProdutos() {
       categoria: produto.category,
     }));
 
+
     return produtosFormatados;
   } catch (error) {
     console.error("Erro na API. Usando produtos locais:", error);

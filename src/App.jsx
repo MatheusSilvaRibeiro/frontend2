@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import Header from "./components/header";
 import { Routes, Route } from "react-router-dom";
-import Produtos from "./pages/Produtos";
+
 import Home from "./pages/Home";
+import Produtos from "./pages/Produtos";
 import Checkout from "./pages/Checkout";
-import buscarProdutos from "./services/produtoService";
+import Admin from "./pages/Admin";
+
+import buscarProdutos from "./services/ProdutoService";
 
 function App() {
   const [carrinho, setCarrinho] = useState({});
@@ -12,22 +15,20 @@ function App() {
   const [carregando, setCarregando] = useState(true);
   const [mensagemProdutos, setMensagemProdutos] = useState("");
 
+  const [pedidos, setPedidos] = useState([]);
+  const [pedidoFinalizado, setPedidoFinalizado] = useState(false);
+
   useEffect(() => {
     const carrinhoSalvo = localStorage.getItem("carrinho");
-
-    if (carrinhoSalvo) {
-      setCarrinho(JSON.parse(carrinhoSalvo));
-    }
+    if (carrinhoSalvo) setCarrinho(JSON.parse(carrinhoSalvo));
   }, []);
 
   useEffect(() => {
     async function carregarProdutos() {
       try {
         setCarregando(true);
-
         const dados = await buscarProdutos();
         setProdutos(dados);
-
         setMensagemProdutos("Produtos carregados com sucesso.");
       } catch (error) {
         setMensagemProdutos("Não foi possível carregar os produtos.");
@@ -55,9 +56,9 @@ function App() {
       const quantidadeAtual = prev[nome] || 0;
 
       if (quantidadeAtual <= 1) {
-        const novoCarrinho = { ...prev };
-        delete novoCarrinho[nome];
-        return novoCarrinho;
+        const novo = { ...prev };
+        delete novo[nome];
+        return novo;
       }
 
       return {
@@ -73,6 +74,12 @@ function App() {
   };
 
   const finalizarCompra = () => {
+    setPedidos((prev) => [
+      ...prev,
+      { id: Date.now(), itens: carrinho },
+    ]);
+
+    setPedidoFinalizado(true);
     setCarrinho({});
     localStorage.removeItem("carrinho");
   };
@@ -118,9 +125,12 @@ function App() {
               totalItens={totalItens}
               totalCompra={totalCompra}
               finalizarCompra={finalizarCompra}
+              pedidoFinalizado={pedidoFinalizado}
             />
           }
         />
+
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </div>
   );
