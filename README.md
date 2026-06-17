@@ -1,189 +1,122 @@
 # BlueWave Tech Store
 
-Sistema web full stack de loja virtual para produtos tecnológicos, desenvolvido como projeto integrado das disciplinas de Front-end II e Back-endII.
+Mini e-commerce desenvolvido em React.js para a disciplina de Frontend.
+
+O sistema simula uma loja virtual de produtos tecnológicos, permitindo navegação entre páginas, listagem dinâmica de produtos, carrinho de compras e checkout com persistência local.
 
 ---
 
 # Objetivo do Projeto
 
-Desenvolver uma aplicação web completa para gerenciamento de produtos e pedidos de uma loja virtual, integrando front-end React com uma API RESTful em Node.js + Express e persistência em banco de dados NoSQL.
+Desenvolver uma aplicação React utilizando os conceitos trabalhados em aula:
 
----
-
-# Evolução das Sprints
-
-## Sprint 1
-
-* criação da aplicação React com Vite
-* componentes, estados e eventos
-
-## Sprint 2
-
-* múltiplas páginas com React Router
-* listagem dinâmica de produtos
-* carrinho de compras
-* checkout
-* persistência com localStorage
-* consumo de API externa
-
-## Sprint 3
-
-* integração Front-end + Back-end
-* API RESTful própria
-* CRUD completo de produtos
-* gerenciamento de pedidos
-* controle de estoque
-* MongoDB
-* testes unitários com Jest
-* ESLint
-
----
-
-# Funcionalidades
-
-## Cliente
-
-* visualizar produtos
-* pesquisar e filtrar produtos
-* visualizar detalhes do produto
-* adicionar produtos ao carrinho
-* alterar quantidade de itens
-* remover itens do carrinho
-* finalizar pedido
-* validação de estoque
-
-## Administrador
-
-* cadastrar produtos
-* listar produtos
-* editar produtos
-* remover produtos
-* visualizar estoque
-* listar pedidos
-* visualizar detalhes dos pedidos
+- Componentização
+- Estados com `useState`
+- Hooks com `useEffect`
+- Navegação com React Router
+- Consumo de API externa
+- Persistência com `localStorage`
+- Organização de projeto frontend
 
 ---
 
 # Tecnologias Utilizadas
 
-## Front-end
+- React.js
+- Vite
+- JavaScript
+- React Router DOM
+- CSS
+- DummyJSON API
 
-* React
-* Vite
-* React Router
-* JavaScript
-* CSS
+---
 
-## Back-end
+# Funcionalidades
 
-* Node.js
-* Express
-* MongoDB
-* Mongoose
-* Jest
-* ESLint
+- Navegação entre páginas
+- Listagem dinâmica de produtos
+- Consumo de API externa
+- Carrinho de compras
+- Persistência com `localStorage`
+- Checkout com validação de formulário
+- Estrutura organizada em componentes e páginas
+- Fallback local para produtos em caso de erro da API
 
 ---
 
 # Estrutura do Projeto
 
 ```txt
-bluewave/
-├── frontend/
-│   └── aplicação React
+src/
+├── assets/
+├── components/
+│   ├── Header.jsx
+│   ├── ProdutoCard.jsx
+│   └── CarrinhoResumo.jsx
 │
-├── backend/
-│   └── API RESTful Node.js + Express
+├── data/
+│   └── produtos.js
 │
-├── docs/
-│   ├── sprint1/
-│   ├── sprint2/
-│   └── sprint3/
+├── pages/
+│   ├── Home.jsx
+│   ├── Produtos.jsx
+│   └── Checkout.jsx
 │
-└── README.md
+├── services/
+│   └── produtoService.js
+│
+├── styles/
+│   └── global.css
+│
+├── App.jsx
+└── main.jsx
 ```
 
 ---
 
 # Como Executar o Projeto
 
-## Front-end
+## 1. Clonar o repositório
 
 ```bash
-cd frontend
-npm install
-npm run dev
+git clone https://github.com/MatheusSilvaRibeiro/frontend2
 ```
 
-## Back-end
+## 2. Instalar as dependências
 
 ```bash
-cd backend
 npm install
+```
+
+## 3. Executar o projeto
+
+```bash
 npm run dev
 ```
 
 ---
 
-# Fluxo Git do Projeto
+# Funcionalidades da Sprint 2
 
-## Branches principais
-
-* `main` → versão estável
-* `develop` → integração da Sprint 3
-
-## Branches individuais
-
-Cada integrante trabalha em sua própria branch:
-
-```bash
-git checkout develop
-git pull
-git checkout -b feature/nome-da-tarefa
-```
-
-Após finalizar:
-
-```bash
-git add .
-git commit -m "mensagem clara"
-git push -u origin feature/nome-da-tarefa
-```
-
-Depois:
-
-* abrir Pull Request para `develop`
-* revisão do grupo
-* merge da funcionalidade
-
----
-
-# Requisitos Técnicos Atendidos
-
-## Front-end II
-
-* React com Vite
-* componentização
-* React Router
-* formulários controlados
-* gerenciamento de estado
-* integração com API RESTful
-
-## Back-endII
-
-* API RESTful
-* CRUD completo
-* MongoDB
-* tratamento de exceções
-* ESLint
-* testes unitários com Jest
-* cobertura de testes
+- Múltiplas páginas com React Router
+- Formulário controlado com `useState`
+- Persistência de dados com `localStorage`
+- Listagem dinâmica de produtos
+- Componentização em arquivos separados
+- Integração com API externa
+- Estrutura organizada do frontend
 
 ---
 
 # Integrantes
 
-* Matheus Silva Ribeiro
-* Tauane Carolina da Silva
-* Igor da Rosa Mafalda
-* Luan
+- Matheus Silva Ribeiro
+- Tauane Carolina
+- Igor Mafalda
+- Luan Martins
+
+---
+
+# Observações
+
+O sistema utiliza uma API pública para carregamento de produtos. Caso a API esteja indisponível, o projeto utiliza produtos locais como fallback para garantir o funcionamento da aplicação.

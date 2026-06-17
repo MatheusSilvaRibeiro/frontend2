@@ -4,22 +4,21 @@ import { Routes, Route } from "react-router-dom";
 import Produtos from "./pages/Produtos";
 import Home from "./pages/Home";
 import Checkout from "./pages/Checkout";
-import buscarProdutos from "./services/ProdutoService";
+import buscarProdutos from "./services/produtoService";
 
 function App() {
-  const [carrinho, setCarrinho] = useState(() => {
-    const carrinhoSalvo = localStorage.getItem("carrinho");
-
-    if (carrinhoSalvo) {
-      return JSON.parse(carrinhoSalvo);
-    }
-
-    return {};
-  });
-
+  const [carrinho, setCarrinho] = useState({});
   const [produtos, setProdutos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [mensagemProdutos, setMensagemProdutos] = useState("");
+
+  useEffect(() => {
+    const carrinhoSalvo = localStorage.getItem("carrinho");
+
+    if (carrinhoSalvo) {
+      setCarrinho(JSON.parse(carrinhoSalvo));
+    }
+  }, []);
 
   useEffect(() => {
     async function carregarProdutos() {
@@ -44,39 +43,26 @@ function App() {
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
   }, [carrinho]);
 
-  const adicionar = (id) => {
-    const produto = produtos.find((item) => item.id === id);
-
-    if (!produto) return;
-
-    setCarrinho((prev) => {
-      const quantidadeAtual = prev[id] || 0;
-
-      if (quantidadeAtual >= produto.estoque) {
-        alert("Estoque máximo atingido para este produto.");
-        return prev;
-      }
-
-      return {
-        ...prev,
-        [id]: quantidadeAtual + 1,
-      };
-    });
+  const adicionar = (nome) => {
+    setCarrinho((prev) => ({
+      ...prev,
+      [nome]: (prev[nome] || 0) + 1,
+    }));
   };
 
-  const remover = (id) => {
+  const remover = (nome) => {
     setCarrinho((prev) => {
-      const quantidadeAtual = prev[id] || 0;
+      const quantidadeAtual = prev[nome] || 0;
 
       if (quantidadeAtual <= 1) {
         const novoCarrinho = { ...prev };
-        delete novoCarrinho[id];
+        delete novoCarrinho[nome];
         return novoCarrinho;
       }
 
       return {
         ...prev,
-        [id]: quantidadeAtual - 1,
+        [nome]: quantidadeAtual - 1,
       };
     });
   };
@@ -97,7 +83,7 @@ function App() {
   );
 
   const totalCompra = produtos.reduce((acc, produto) => {
-    const quantidade = carrinho[produto.id] || 0;
+    const quantidade = carrinho[produto.nome] || 0;
     return acc + quantidade * produto.preco;
   }, 0);
 
